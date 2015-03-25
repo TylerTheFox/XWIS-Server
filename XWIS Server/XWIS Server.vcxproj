@@ -150,10 +150,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="serverserv.cpp" />
+    <ClCompile Include="xwisServ.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="serverserv.hpp" />
+    <ClInclude Include="irc_codes.hpp" />
+    <ClInclude Include="xwisServ.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

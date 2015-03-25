@@ -1,9 +1,9 @@
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable: 4996) // D_SCL_SECURE_NO_WARNINGS
 #endif
-
-#ifndef SERVERSERV_H
-#define SERVERSERV_H
+#ifndef XWIS_H
+#define XWIS_H
 
 #include<iostream>
 #include<list>
@@ -15,16 +15,21 @@
 #include<boost/thread.hpp>
 #include<boost/asio/ip/tcp.hpp>
 #include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+
+#include "irc_codes.hpp"
 
 using namespace std;
 using namespace boost::asio;
 using namespace boost::asio::ip;
 
-
-
-class serverserv {
+class xwisServ {
 public:
-	serverserv();
+	enum serverType {
+		serverserv,
+		XWIS
+	};
+	xwisServ(int port, serverType _type);
 private:
 	boost::thread_group threads;
 	typedef boost::shared_ptr<tcp::socket> socket_ptr;
@@ -41,8 +46,16 @@ private:
 		sml = 100,
 		lon = 200
 	};
+	serverType type;
+
+
 	bool isAskingForServerList(const std::string& s);
-	char * removeNullTerminator(char * str);
+
+
+	// Processing Stuff
+	string xwisServ::getTime();
+
+	// Server Stuff
 	bool clientSentExit(string_ptr);
 	void disconnectClient(socket_ptr);
 	void acceptorLoop();
