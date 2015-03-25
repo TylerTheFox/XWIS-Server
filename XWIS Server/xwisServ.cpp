@@ -89,13 +89,13 @@ void xwisServ::requestLoop()
 							clientSock->write_some(buffer(" #ECW\n",6));
 						}
 						else if ((*msg).find("CODEPAGE") != std::string::npos) {
-
+							// todo
 						}
 						else if ((*msg).find("GETLOCALE") != std::string::npos) {
-
+							// todo
 						}
 						else if ((*msg).find("GETCODEPAGE") != std::string::npos) {
-
+							// todo
 						}
 						else if ((*msg).find("TOPIC") != std::string::npos) {
 							boost::this_thread::sleep(boost::posix_time::millisec(5000)); // Race condition :(
