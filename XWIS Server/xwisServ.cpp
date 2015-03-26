@@ -18,17 +18,11 @@ void xwisServ::acceptorLoop()
 {
 	while (true)
 	{
-		try {
 		socket_ptr clientSock(new tcp::socket(service));
 		acceptor->accept(*clientSock);
 		mtx.lock();
 		(*clientList)->emplace_back(clientSock);
 		mtx.unlock();
-		}
-		catch (int e) {
-			cerr << e;
-		}
-
 	}
 }
 
@@ -43,19 +37,16 @@ void xwisServ::requestLoop()
 			{
 				if (clientSock->available())
 				{
-					int readBytes;
-					const int BUFFER_SIZE = 1024;
-					char charBuf[BUFFER_SIZE];
-					do
-					{
-						readBytes = clientSock->read_some(boost::asio::buffer(charBuf, BUFFER_SIZE));
-					} while (readBytes >= BUFFER_SIZE);
+					boost::asio::streambuf response;
+					boost::asio::read_until(*clientSock, response, "\r\n\0");
+
+					string tmp; 
+					std::ostringstream ss;
+					ss << &response;
+					tmp = ss.str();
 
 
-
-					string_ptr msg(new string(charBuf, readBytes));
-
-
+					string_ptr msg(new string(tmp));
 
 					if (clientSentExit(msg))
 					{
