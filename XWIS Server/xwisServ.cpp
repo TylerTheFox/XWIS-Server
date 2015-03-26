@@ -18,11 +18,17 @@ void xwisServ::acceptorLoop()
 {
 	while (true)
 	{
+		try {
 		socket_ptr clientSock(new tcp::socket(service));
 		acceptor->accept(*clientSock);
 		mtx.lock();
 		(*clientList)->emplace_back(clientSock);
 		mtx.unlock();
+		}
+		catch (int e) {
+			cerr << e;
+		}
+
 	}
 }
 
@@ -37,11 +43,19 @@ void xwisServ::requestLoop()
 			{
 				if (clientSock->available())
 				{
-					char readBuf[12288] = { 0 };
+					int readBytes;
+					const int BUFFER_SIZE = 1024;
+					char charBuf[BUFFER_SIZE];
+					do
+					{
+						readBytes = clientSock->read_some(boost::asio::buffer(charBuf, BUFFER_SIZE));
+					} while (readBytes >= BUFFER_SIZE);
 
-					size_t bytesRead = clientSock->read_some(buffer(readBuf, 12288));
 
-					string_ptr msg(new string(readBuf, bytesRead));
+
+					string_ptr msg(new string(charBuf, readBytes));
+
+
 
 					if (clientSentExit(msg))
 					{
@@ -97,8 +111,7 @@ void xwisServ::requestLoop()
 						else if ((*msg).find("GETCODEPAGE") != std::string::npos) {
 							// todo
 						}
-						else if ((*msg).find("TOPIC") != std::string::npos) {
-							boost::this_thread::sleep(boost::posix_time::millisec(5000)); // Race condition :(
+						else if ((*msg).find("STARTG") != std::string::npos) {
 							clientSock->write_some(buffer(":ECW!u\\@h STARTG u :ECW 0.0.0.0 :1650524 ", strlen(":ECW!u\\@h STARTG u :ECW 0 :1650524 ")));
 							clientSock->write_some(buffer(getTime(), strlen(getTime().c_str())));
 							clientSock->write_some(buffer("\n", 1));
