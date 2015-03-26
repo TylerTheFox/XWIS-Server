@@ -23,6 +23,7 @@ void xwisServ::acceptorLoop()
 		mtx.lock();
 		(*clientList)->emplace_back(clientSock);
 		mtx.unlock();
+		boost::this_thread::sleep(boost::posix_time::millisec(sleepLen::sml));
 	}
 }
 
@@ -40,7 +41,7 @@ void xwisServ::requestLoop()
 					boost::asio::streambuf response;
 					boost::asio::read_until(*clientSock, response, "\r\n\0");
 
-					string tmp; 
+					string tmp;
 					std::ostringstream ss;
 					ss << &response;
 					tmp = ss.str();
@@ -56,7 +57,7 @@ void xwisServ::requestLoop()
 
 
 					if (type == XWIS) {
-						
+
 						if ((*msg).find("verchk") != std::string::npos) {
 							clientSock->write_some(buffer(": 375 u :- Welcome to Expansive Civilian Warfare!\n", strlen(": 375 u : -Welcome to Expansive Civilian Warfare!\n")));
 							clientSock->write_some(buffer(": 372 u :- \n", strlen(": 372 u :- \n")));
@@ -91,7 +92,7 @@ void xwisServ::requestLoop()
 							clientSock->write_some(buffer(" ", 1));
 							clientSock->write_some(buffer(strs[6], strlen(strs[6].c_str())));
 							clientSock->write_some(buffer(" :#", 3));
-							clientSock->write_some(buffer(" #ECW\n",6));
+							clientSock->write_some(buffer(" #ECW\n", 6));
 						}
 						else if ((*msg).find("CODEPAGE") != std::string::npos) {
 							// todo
@@ -110,7 +111,8 @@ void xwisServ::requestLoop()
 
 
 
-					} else {
+					}
+					else {
 						if (isAskingForServerList(*msg)) {
 							clientSock->write_some(buffer(": 610 u 1\n", 10));
 							clientSock->write_some(buffer(": 605 u :xwis.brandanlasley.com 4003 '0:XWIS' -8 36.1083 -115.0582\n", 67));
@@ -118,13 +120,12 @@ void xwisServ::requestLoop()
 							clientSock->write_some(buffer(": 607\n", 6));
 						}
 					}
-
 				}
 			}
 		}
 		mtx.unlock();
+		boost::this_thread::sleep(boost::posix_time::millisec(sleepLen::lon));
 	}
-	boost::this_thread::sleep(boost::posix_time::millisec(sleepLen::lon));
 }
 
 bool xwisServ::isAskingForServerList(const std::string& s)

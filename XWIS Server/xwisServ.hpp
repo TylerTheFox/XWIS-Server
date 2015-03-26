@@ -34,8 +34,6 @@ private:
 	boost::thread_group threads;
 	typedef boost::shared_ptr<tcp::socket> socket_ptr;
 	typedef boost::shared_ptr<string> string_ptr;
-	typedef map<socket_ptr, string_ptr> clientMap;
-	typedef boost::shared_ptr<clientMap> clientMap_ptr;
 	typedef boost::shared_ptr< list<socket_ptr> > clientList_ptr;
 	io_service service;
 	tcp::acceptor * acceptor;
@@ -48,9 +46,7 @@ private:
 	};
 	serverType type;
 
-
 	bool isAskingForServerList(const std::string& s);
-
 
 	// Processing Stuff
 	string getTime();
