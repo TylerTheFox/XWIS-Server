@@ -121,6 +121,8 @@ void xwisServ::requestLoop()
 							clientSock->write_some(buffer(": 605 u :xwis.brandanlasley.com 4003 '0:XWIS' -8 36.1083 -115.0582\n", 67));
 							clientSock->write_some(buffer(": 615 u :173.194.33.110 0 'US West Ping server' -8 36.1083 -115.0582\n", 69));
 							clientSock->write_some(buffer(": 607\n", 6));
+							disconnectClient(clientSock);
+							break;
 						}
 					}
 				}
