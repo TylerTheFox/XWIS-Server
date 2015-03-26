@@ -16,7 +16,7 @@ xwisServ::xwisServ(int port, serverType _type) {
 
 void xwisServ::acceptorLoop()
 {
-	for (;;)
+	while (true)
 	{
 		socket_ptr clientSock(new tcp::socket(service));
 		acceptor->accept(*clientSock);
@@ -28,7 +28,7 @@ void xwisServ::acceptorLoop()
 
 void xwisServ::requestLoop()
 {
-	for (;;)
+	while (true)
 	{
 		if (!(*clientList)->empty())
 		{
