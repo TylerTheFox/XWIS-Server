@@ -14,6 +14,12 @@ xwisServ::xwisServ(int port, serverType _type) {
 	threads.join_all();
 }
 
+xwisServ::~xwisServ(){
+	threads.interrupt_all();
+	delete acceptor;
+	delete clientList;
+}
+
 void xwisServ::acceptorLoop()
 {
 	while (true)
@@ -108,9 +114,6 @@ void xwisServ::requestLoop()
 							clientSock->write_some(buffer(getTime(), strlen(getTime().c_str())));
 							clientSock->write_some(buffer("\n", 1));
 						}
-
-
-
 					}
 					else {
 						if (isAskingForServerList(*msg)) {

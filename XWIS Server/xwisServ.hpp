@@ -30,6 +30,7 @@ public:
 		XWIS
 	};
 	xwisServ(int port, serverType _type);
+	~xwisServ();
 private:
 	boost::thread_group threads;
 	typedef boost::shared_ptr<tcp::socket> socket_ptr;
