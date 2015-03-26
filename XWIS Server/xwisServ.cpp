@@ -39,7 +39,7 @@ void xwisServ::requestLoop()
 				{
 					char readBuf[12288] = { 0 };
 
-					int bytesRead = clientSock->read_some(buffer(readBuf, 12288));
+					size_t bytesRead = clientSock->read_some(buffer(readBuf, 12288));
 
 					string_ptr msg(new string(readBuf, bytesRead));
 
@@ -73,7 +73,7 @@ void xwisServ::requestLoop()
 						else if ((*msg).find("JOINGAME") != std::string::npos) {
 							vector<string> strs;
 							boost::split(strs, (*msg), boost::is_any_of(" "));
-							clientSock->write_some(buffer(":ECW!u\@h JOINGAME ", strlen(":ECW!u\@h JOINGAME ")));
+							clientSock->write_some(buffer(":ECW!u\\@h JOINGAME ", strlen(":ECW!u\\@h JOINGAME ")));
 							clientSock->write_some(buffer(strs[2], strlen(strs[2].c_str())));
 							clientSock->write_some(buffer(" ", 1));
 							clientSock->write_some(buffer(strs[3], strlen(strs[3].c_str())));
@@ -99,7 +99,7 @@ void xwisServ::requestLoop()
 						}
 						else if ((*msg).find("TOPIC") != std::string::npos) {
 							boost::this_thread::sleep(boost::posix_time::millisec(5000)); // Race condition :(
-							clientSock->write_some(buffer(":ECW!u\@h STARTG u :ECW 0.0.0.0 :1650524 ", strlen(":ECW!u\@h STARTG u :ECW 0 :1650524 ")));
+							clientSock->write_some(buffer(":ECW!u\\@h STARTG u :ECW 0.0.0.0 :1650524 ", strlen(":ECW!u\\@h STARTG u :ECW 0 :1650524 ")));
 							clientSock->write_some(buffer(getTime(), strlen(getTime().c_str())));
 							clientSock->write_some(buffer("\n", 1));
 						}

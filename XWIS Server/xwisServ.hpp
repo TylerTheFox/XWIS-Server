@@ -53,7 +53,7 @@ private:
 
 
 	// Processing Stuff
-	string xwisServ::getTime();
+	string getTime();
 
 	// Server Stuff
 	bool clientSentExit(string_ptr);
