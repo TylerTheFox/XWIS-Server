@@ -54,7 +54,7 @@ void xwisServ::requestLoop()
 
 
 					string_ptr msg(new string(tmp));
-
+					cout << *msg;
 					if (clientSentExit(msg))
 					{
 						disconnectClient(clientSock);
@@ -76,12 +76,6 @@ void xwisServ::requestLoop()
 							clientSock->write_some(buffer(getTime(), strlen(getTime().c_str())));
 							clientSock->write_some(buffer("\n", 1));
 						}
-						else if ((*msg).find("SETCODEPAGE") != std::string::npos) {
-							clientSock->write_some(buffer(": 329 u 1252\n", strlen(": 329 u 1252\n")));
-						}
-						else if ((*msg).find("GETINSIDER") != std::string::npos) {
-							clientSock->write_some(buffer(": 399 u ECW`0\n", strlen(": 399 u ECW`0\n")));
-						}
 						else if ((*msg).find("JOINGAME") != std::string::npos) {
 							vector<string> strs;
 							boost::split(strs, (*msg), boost::is_any_of(" "));
@@ -99,15 +93,6 @@ void xwisServ::requestLoop()
 							clientSock->write_some(buffer(strs[6], strlen(strs[6].c_str())));
 							clientSock->write_some(buffer(" :#", 3));
 							clientSock->write_some(buffer(" #ECW\n", 6));
-						}
-						else if ((*msg).find("CODEPAGE") != std::string::npos) {
-							// todo
-						}
-						else if ((*msg).find("GETLOCALE") != std::string::npos) {
-							// todo
-						}
-						else if ((*msg).find("GETCODEPAGE") != std::string::npos) {
-							// todo
 						}
 						else if ((*msg).find("STARTG") != std::string::npos) {
 							clientSock->write_some(buffer(":ECW!u\\@h STARTG u :ECW 0.0.0.0 :1650524 ", strlen(":ECW!u\\@h STARTG u :ECW 0 :1650524 ")));
